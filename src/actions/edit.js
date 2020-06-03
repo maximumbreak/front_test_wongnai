@@ -1,3 +1,4 @@
+import * as KeywordAction from './keyword'
 import { mainUrl } from '../config/mainUrl'
 
 export const EDIT_REVIEWS = '[EDIT REVIEWS ID] Edit Reviews ID'
@@ -16,7 +17,7 @@ export const editReviewsIDFailed = (payload) => {
   return { type: EDIT_REVIEWS_FAILED, payload }
 }
 
-export const fetchEditReviewsId = (payload, dispatch) => {
+export const fetchEditReviewsId = (payload, dispatch, state) => {
   const { id, reviews } = payload
   dispatch(editReviewsID(payload))
   return fetch(`${mainUrl}/reviews/${id}`, {
@@ -31,7 +32,23 @@ export const fetchEditReviewsId = (payload, dispatch) => {
     .then((response) => {
       return response.json()
     })
-    .then((json) => dispatch(editReviewsIDSuccess(json)))
+    .then((json) => {
+      dispatch(editReviewsIDSuccess(json))
+      const searchRegExp = new RegExp(state.reviews.search, 'g')
+      const replaceWith = `<keyword>${state.reviews.search}</keyword>`
+      state.reviews.data.map((items) => {
+        if (items.id === id) {
+          items.reviews = reviews
+          items.reviews = items.reviews.replace(searchRegExp, replaceWith)
+        }
+      })
+      dispatch(
+        KeywordAction.getKeywordsSuccess(
+          state.reviews.search,
+          state.reviews.data
+        )
+      )
+    })
     .catch((error) => {
       if (error) dispatch(editReviewsIDFailed(undefined))
     })

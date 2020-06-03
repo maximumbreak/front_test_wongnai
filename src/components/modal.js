@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import { store } from '../store/store'
 import { useForm } from 'react-hook-form'
 import * as EditActions from '../actions/edit'
-import * as KeywordActions from '../actions/keyword'
 
 export default ({ setModalShow, modalShow, selectData }) => {
   const globalState = useContext(store)
@@ -16,8 +15,7 @@ export default ({ setModalShow, modalShow, selectData }) => {
       id: select?.data?.id,
       reviews: data.edit,
     }
-    dispatch(EditActions.fetchEditReviewsId(payload, dispatch))
-    dispatch(KeywordActions.fetchKeywords({ search: reviews.search }, dispatch))
+    dispatch(EditActions.fetchEditReviewsId(payload, dispatch, state))
     setModalShow(false)
   }
 
