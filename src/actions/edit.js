@@ -36,12 +36,12 @@ export const fetchEditReviewsId = (payload, dispatch, state) => {
       dispatch(editReviewsIDSuccess(json))
       const searchRegExp = new RegExp(state.reviews.search, 'g')
       const replaceWith = `<keyword>${state.reviews.search}</keyword>`
-      state.reviews.data.map((items) => {
-        if (items.id === id) {
+      state.reviews.data
+        .filter((items) => items.id === id)
+        .map((items) => {
           items.reviews = reviews
           items.reviews = items.reviews.replace(searchRegExp, replaceWith)
-        }
-      })
+        })
       dispatch(
         KeywordAction.getKeywordsSuccess(
           state.reviews.search,
