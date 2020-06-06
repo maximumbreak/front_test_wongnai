@@ -37,7 +37,7 @@ export const fetchEditReviewsId = (payload, dispatch, state) => {
       const searchRegExp = new RegExp(state.reviews.search, 'g')
       const replaceWith = `<keyword>${state.reviews.search}</keyword>`
       state.reviews.data
-        .filter((items) => items.id === id)
+        .filter((items) => items.id == id)
         .map((items) => {
           items.reviews = reviews
           items.reviews = items.reviews.replace(searchRegExp, replaceWith)
